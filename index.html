@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>운세보는 냥냥</title>
+    <style>
+        body {
+            background-color: #2c3e50;
+            font-family: Arial, sans-serif;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ecf0f1;
+            padding: 20px;
+        }
+
+        #chatBox {
+            width: 90%;
+            max-width: 600px;
+            height: 400px;
+            border: 1px solid #bdc3c7;
+            padding: 20px;
+            margin: 20px auto;
+            background: linear-gradient(to right, #34495e, #2c3e50);
+            border-radius: 10px;
+            overflow: auto;
+        }
+
+        #basicUserData {
+            padding: 20px;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        #dob {
+            width: 100%;
+            padding: 10px;
+            border: 0;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: 0;
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            clear: both;
+        }
+
+        .message span {
+            display: inline-block;
+            max-width: 80%;
+            padding: 5px 10px;
+            border-radius: 10px;
+            margin: 5px;
+        }
+
+        .message.user {
+            text-align: right;
+        }
+
+        .message.user span {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .message.assistant span {
+            background-color: #bdc3c7;
+            color: black;
+        }
+
+        img {
+            width: 400px;
+            height: 400px;
+        }
+
+        img {
+            display: block;
+            margin: 0px auto;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        #userInput {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        #userMessage {
+            flex-grow: 1;
+            margin-right: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 0;
+        }
+    </style>
+</head>
+
+
+<body>
+    <div id="outer">
+        <h1>운세보는 냥냥</h1>
+        <img src="fortuneTellcat.png" alt="fortuneTellCat">
+        <div id="basicUserData" style="text-align:left;">
+            <label for="dob">생년월일</label>
+            <input id="dob" type="date" placeholder="Enter your birthdate..." /><br>
+            <label for="hour">태어난 시간</label>
+            <select id="hour" class="time-select">
+                <option value="00:00">00:00</option>
+                <option value="01:00">01:00</option>
+                <option value="02:00">02:00</option>
+                <option value="03:00">03:00</option>
+                <option value="04:00">04:00</option>
+                <option value="05:00">05:00</option>
+                <option value="06:00">06:00</option>
+                <option value="07:00">07:00</option>
+                <option value="08:00">08:00</option>
+                <option value="09:00">09:00</option>
+                <option value="10:00">10:00</option>
+                <option value="11:00">11:00</option>
+                <option value="12:00">12:00</option>
+                <option value="13:00">13:00</option>
+                <option value="14:00">14:00</option>
+                <option value="15:00">15:00</option>
+                <option value="16:00">16:00</option>
+                <option value="17:00">17:00</option>
+                <option value="18:00">18:00</option>
+                <option value="19:00">19:00</option>
+                <option value="20:00">20:00</option>
+                <option value="21:00">21:00</option>
+                <option value="22:00">22:00</option>
+                <option value="23:00">23:00</option>
+            </select><br>
+            <div  style="text-align:center">
+                <button onclick="start()">운세보기</button>
+            </div>
+        </div>
+        <div id="chat" class="chat-container" style="display: none;">
+            <div id="chatBox" class="chat-box">
+                <div class="chat-message">
+                    <p class="assistant">운세에 대해서 물어봐 주세요!</p>
+                </div>
+            </div>
+            <div id="loader" class="loader" style="display: none;">
+                <i class="fa fa-spinner fa-spin"></i>
+            </div>
+            <div id="userInput" class="chat-input" style="text-align:center">
+                <input id="userMessage" type="text" placeholder="질문을 입력해주세요">
+                <button id="btn" onclick="spinner()">전송</button>
+            </div>
+        </div>
+
+
+    </div>
+    <script>
+        let userMessages = [];
+        let assistantMessages = [];
+        let myDateTime = '';
+        var chatBox = document.querySelector('#chatBox');
+        var userMessage = document.querySelector('#userMessage').value;
+
+
+        function spinner() {
+            document.getElementById('loader').style.display = "block";
+        }
+
+        async function start() {
+            const date = document.getElementById('dob').value;
+            const hour = document.getElementById('hour').value;
+            if (date === '') {
+                alert('생년월일을 입력해주세요.');
+                return;
+            }
+            myDateTime = date + hour;
+            document.getElementById("basicUserData").style.display = "none";
+            document.getElementById("chat").style.display = "block";
+            document.getElementById("userInput").style.display = "block";
+        }
+
+        // 수정된 sendMessage 함수
+
+        const sendMessage = async () => {
+            let userMessage = document.querySelector('#userMessage').value;  // 메시지를 보낼 때마다 값을 가져옵니다.
+            chatBox.innerHTML += `<div class="message user"><span>${userMessage}</span></div>`;
+            userMessages.push(userMessage); // userMessages에 추가합니다.
+            try {
+                const response = await fetch("/newProd/fortuneTell", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        userMessages: userMessages,
+                        assistantMessages: assistantMessages,
+                        myDateTime: myDateTime
+                    }),
+                });
+
+                const result = await response.json();
+                assistantMessages.push(result.assistantMessage);  // 응답을 받으면 assistantMessages에 추가합니다.
+
+                chatBox.innerHTML += `<div class="message assistant"><span>${result.assistantMessage}</span></div>`;
+                document.querySelector('#userMessage').value = ''; // 메시지를 보낸 후 입력 필드를 초기화합니다.
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        document.querySelector('.chat-input button').addEventListener('click', sendMessage);
+      
+
+
+    </script>
+</body>
+
+</html>
