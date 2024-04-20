@@ -1,4 +1,4 @@
-const apiKey = "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";
+const apiKey = "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";
 const serverless = require('serverless-http');
 const { Configuration, OpenAIApi } = require("openai");
 
@@ -19,7 +19,7 @@ const openai = new OpenAIApi(configuration);
 //npm i cors로 설치
 
 let corsOptions = {
-    origin: 'https://fortune-tell-cat.pages.dev',
+    origin: 'https://litodroid.github.io/ChatGpt2/',
     credentials: true,
     methods: ["GET", "POST"], // 추가: 허용하려는 메서드를 지정
     allowedHeaders: ["Content-Type", "Authorization"]
