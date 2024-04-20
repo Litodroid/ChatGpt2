@@ -1,4 +1,4 @@
-const apiKey = "";
+const apiKey = "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";
 const serverless = require('serverless-http');
 const { Configuration, OpenAIApi } = require("openai");
 
