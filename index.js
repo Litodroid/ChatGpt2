@@ -1,8 +1,8 @@
-const apiKey = "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";
+const apiKey = "sk-proj-7poCr4rUokSigKCPRuQZT3BlbkFJwjmy8RTGQsFwo9fJQpiC";
 const serverless = require('serverless-http');
 const { Configuration, OpenAIApi } = require("openai");
 
-//여기부터 웹서버 구축 
+//여기부터 웹서버 구축    
 
 const express = require('express')
 var cors = require('cors')
